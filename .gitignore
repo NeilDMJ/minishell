@@ -1,0 +1,5 @@
+#ignorar compilados
+*.o
+*.so
+*.a
+*.out   
