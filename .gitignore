@@ -3,3 +3,9 @@
 *.so
 *.a
 *.out   
+#ignorar archivos de configuración
+*.cfg
+*.ini
+*.env
+#ignorar archivos de idea
+.idea/
