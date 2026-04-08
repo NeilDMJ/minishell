@@ -7,7 +7,7 @@ int main() {
     char *args[MAX_ARGS];
 
     while(1){
-        printf("\nminishell> ");
+        printf("\n> ");
         if (fgets(cmd, sizeof(cmd), stdin) == NULL) 
             return 1;
 

@@ -14,17 +14,10 @@ void pwd_fun()
     printf("%s\n", ruta);
 }
 
-void cd_fun(const char *cmd)
-{
-    if (cmd == NULL)
-    {
-        return;
-    }
-
-    if (chdir(cmd) != 0)
-    {
-        perror("cd");
-    }
+//Dirigirse a una ruta especifica
+void cd_fun(const char *ruta ){
+    if (ruta == NULL) printf("Falta el nombre del directorio");
+    if(chdir(ruta) == -1) printf("No existe la ruta");
 }
 
 //separar
