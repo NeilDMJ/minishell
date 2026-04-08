@@ -9,7 +9,7 @@
 
 void pwd_fun();
 
-void cd_fun(const char *cmd);
+void cd_fun(const char *ruta);
 
 int mkdir_fun(const char *cmd);
 
