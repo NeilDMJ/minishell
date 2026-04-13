@@ -47,6 +47,9 @@ int main() {
         else if(strcmp(args[0], "stat") == 0){
             stat_fun(args[1]);
         }
+        else if(strcmp(args[0], "cat") == 0){
+            cat_fun(args[1]);
+        }
         
     }
     return 0;

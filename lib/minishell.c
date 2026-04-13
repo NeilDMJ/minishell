@@ -8,6 +8,7 @@
 #include "minishell.h"
 #include <time.h>
 #include <stdint.h>
+#include <fcntl.h>
 #define RUTA 255
 
 void pwd_fun()
@@ -120,8 +121,36 @@ void stat_fun(const char *ruta){
     printf("Last file modification:   %s", ctime(&sb.st_mtime));
 
     exit(EXIT_SUCCESS);
-
-
 }
 
+void cat_fun(const char *ruta){
+    struct stat sb;
+    char buffer[1024];
+    int tty;
+    ssize_t bytes_read;
 
+    if (lstat(ruta, &sb) == -1) {
+        perror("lstat");
+        exit(EXIT_FAILURE);
+    }
+
+    if (S_ISDIR(sb.st_mode)) {
+        printf("Es un directorio\n");
+    } else if (S_ISREG(sb.st_mode)) {
+        tty = open(ruta, O_RDONLY);
+        if (tty == -1) {
+            perror("open");
+            exit(EXIT_FAILURE);
+        }
+
+        while ((bytes_read = read(tty, buffer, sizeof(buffer))) > 0) {
+            write(STDOUT_FILENO, buffer, bytes_read);
+        }
+
+        if (bytes_read == -1) {
+            perror("read");
+        }
+
+        close(tty);
+    }
+}
