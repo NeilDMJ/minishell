@@ -46,6 +46,15 @@ int main() {
         else if(strcmp(args[0], "exit") == 0){
             break;
         }
+        else if(strcmp(args[0], "ls") == 0){
+            ls_fun();
+        }
+        else if(strcmp(args[0], "stat") == 0){
+            stat_fun(args[1]);
+        }
+        else if(strcmp(args[0], "cat") == 0){
+            cat_fun(args[1]);
+        }
         
     }
     return 0;

@@ -4,7 +4,11 @@
 #include <string.h>
 #include <sys/wait.h>
 #include <sys/stat.h>
+#include <sys/sysmacros.h>
 #include "minishell.h"
+#include <time.h>
+#include <stdint.h>
+#include <fcntl.h>
 #define RUTA 255
 
 void pwd_fun()
@@ -53,7 +57,34 @@ int mkdir_fun(const char *cmd){
 
     return 0;
 }
+ void ls_fun(){
+    DIR *directorio;
+    struct dirent *dirEntry;
+    char ruta[RUTA];
+    getcwd(ruta,RUTA);
+    directorio = opendir(ruta);
+    if( directorio == NULL){
+        fprintf (stderr, "No puedo abrir el directorio %s. Error %s\n", ruta, strerror(errno));
+        exit(1);
+    }
+    while((dirEntry = readdir(directorio)) != NULL){
+        printf("%s \n", dirEntry->d_name);
+    }
+    closedir(directorio);
+    
+ }
+void stat_fun(const char *ruta){
+    struct stat sb;
+    if(opendir(ruta) == NULL) {
+        printf("No es posiblo abrir el directorio %s", ruta);
+        exit(EXIT_FAILURE);
+    }
+    if (lstat(ruta, &sb) == -1) {
+        perror("lstat");
+        exit(EXIT_FAILURE);
+    }
 
+<<<<<<< HEAD
 //funcion ls con opendir, readdir y closedir, reusando getcwd
 void ls_fun(const char *dir){
     char ruta[RUTA];
@@ -74,4 +105,75 @@ void ls_fun(const char *dir){
     }
 
     closedir(d);
+=======
+    printf("ID of containing device:  [%x,%x]\n", major(sb.st_dev), minor(sb.st_dev));
+
+    printf("File type:                ");
+    if (S_ISBLK(sb.st_mode)) {
+        printf("block device\n");
+    } else if (S_ISCHR(sb.st_mode)) {
+        printf("character device\n");
+    } else if (S_ISDIR(sb.st_mode)) {
+        printf("directory\n");
+    } else if (S_ISFIFO(sb.st_mode)) {
+        printf("FIFO/pipe\n");
+    } else if (S_ISLNK(sb.st_mode)) {
+        printf("symlink\n");
+    } else if (S_ISREG(sb.st_mode)) {
+        printf("regular file\n");
+    } else if (S_ISSOCK(sb.st_mode)) {
+        printf("socket\n");
+    } else {
+        printf("unknown?\n");
+    }
+
+
+    printf("I-node number:            %ju\n", (uintmax_t) sb.st_ino);
+    printf("Mode:                     %jo (octal)\n", (uintmax_t) sb.st_mode);
+
+    printf("Link count:               %ju\n", (uintmax_t) sb.st_nlink);
+    printf("Ownership:                UID=%ju   GID=%ju\n", (uintmax_t) sb.st_uid, (uintmax_t) sb.st_gid);
+
+    printf("Preferred I/O block size: %jd bytes\n", (intmax_t) sb.st_blksize);
+    printf("File size:                %jd bytes\n",(intmax_t) sb.st_size);
+    printf("Blocks allocated:         %jd\n",(intmax_t) sb.st_blocks);
+
+    printf("Last status change:       %s", ctime(&sb.st_ctime));
+    printf("Last file access:         %s", ctime(&sb.st_atime));
+    printf("Last file modification:   %s", ctime(&sb.st_mtime));
+
+    exit(EXIT_SUCCESS);
+}
+
+void cat_fun(const char *ruta){
+    struct stat sb;
+    char buffer[1024];
+    int tty;
+    ssize_t bytes_read;
+
+    if (lstat(ruta, &sb) == -1) {
+        perror("lstat");
+        exit(EXIT_FAILURE);
+    }
+
+    if (S_ISDIR(sb.st_mode)) {
+        printf("Es un directorio\n");
+    } else if (S_ISREG(sb.st_mode)) {
+        tty = open(ruta, O_RDONLY);
+        if (tty == -1) {
+            perror("open");
+            exit(EXIT_FAILURE);
+        }
+
+        while ((bytes_read = read(tty, buffer, sizeof(buffer))) > 0) {
+            write(STDOUT_FILENO, buffer, bytes_read);
+        }
+
+        if (bytes_read == -1) {
+            perror("read");
+        }
+
+        close(tty);
+    }
+>>>>>>> 6a575be7465525c3879249bbc614f8ad43ac5d8b
 }
