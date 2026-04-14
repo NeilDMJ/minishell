@@ -61,4 +61,4 @@ int main() {
     return 0;
 }
 
-//gcc -o shell shell.c lib/minishell.c
+//gcc -I lib/ shell.c lib/minishell.c -o minishell
