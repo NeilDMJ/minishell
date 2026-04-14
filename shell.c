@@ -50,15 +50,33 @@ int main() {
             ls_fun();
         }
         else if(strcmp(args[0], "stat") == 0){
+                if (argc < 2) {
+                    fprintf(stderr, "Uso: stat <ruta>\n");
+                    continue;
+                }
             stat_fun(args[1]);
         }
         else if(strcmp(args[0], "cat") == 0){
+            if (argc < 2) {
+                fprintf(stderr, "Uso: cat <ruta>\n");
+                continue;
+            }
             cat_fun(args[1]);
         }
         else if(strcmp(args[0],"unlink") == 0){
+            //validacion
+            if (argc < 2) {
+                fprintf(stderr, "Uso: unlink <ruta>\n");
+                continue;
+            }
             unlink_fun(args[1]);
         }
         else if(strcmp(args[0], "rename")== 0){
+            //validacion 
+            if (argc < 3) {
+                fprintf(stderr, "Uso: rename <nombre_antiguo> <nombre_nuevo>\n");
+                continue;
+            }
             rename_fun(args[1], args[2]);
         }
         

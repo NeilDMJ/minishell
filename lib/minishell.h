@@ -24,12 +24,8 @@ void stat_fun(const char *ruta);
 
 void cat_fun(const char *ruta);
 
-<<<<<<< HEAD
-void rename_fun(const char *old_name, const char *new_name);
-=======
 void unlink_fun(const char *ruta);
 
 void rename_fun(const char *old, const char *new);
->>>>>>> 465003834a44f3b30480398155210c584dde0076
 
 #endif /* MINISHELL_H */
