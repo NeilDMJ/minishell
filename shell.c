@@ -36,7 +36,7 @@ int main() {
         }
         else if (strcmp(args[0], "ls") == 0){
             if (argc < 2) {
-                ls_fun(NULL); 
+                ls_fun(); 
             } 
         }
         else if(strcmp(args[0], "clear") == 0 ){
@@ -54,6 +54,13 @@ int main() {
         }
         else if(strcmp(args[0], "cat") == 0){
             cat_fun(args[1]);
+        }
+        else if(strcmp(args[0], "rename") == 0){
+            if (argc < 3) {
+                fprintf(stderr, "Uso: rename <ruta_origen> <ruta_destino>\n");
+                continue;
+            }
+            rename_fun(args[1], args[2]);
         }
         
     }

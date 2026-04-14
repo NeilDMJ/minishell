@@ -9,6 +9,7 @@
 #include <time.h>
 #include <stdint.h>
 #include <fcntl.h>
+#include <errno.h>
 #define RUTA 255
 
 void pwd_fun()
@@ -57,22 +58,23 @@ int mkdir_fun(const char *cmd){
 
     return 0;
 }
+
  void ls_fun(){
     DIR *directorio;
     struct dirent *dirEntry;
     char ruta[RUTA];
-    getcwd(ruta,RUTA);
+    getcwd(ruta, RUTA);
     directorio = opendir(ruta);
-    if( directorio == NULL){
-        fprintf (stderr, "No puedo abrir el directorio %s. Error %s\n", ruta, strerror(errno));
-        exit(1);
+    if(directorio == NULL){
+        fprintf(stderr, "No puedo abrir el directorio %s. Error %s\n", ruta, strerror(errno));
+        return;
     }
     while((dirEntry = readdir(directorio)) != NULL){
         printf("%s \n", dirEntry->d_name);
     }
     closedir(directorio);
-    
  }
+
 void stat_fun(const char *ruta){
     struct stat sb;
     if(opendir(ruta) == NULL) {
@@ -84,28 +86,6 @@ void stat_fun(const char *ruta){
         exit(EXIT_FAILURE);
     }
 
-<<<<<<< HEAD
-//funcion ls con opendir, readdir y closedir, reusando getcwd
-void ls_fun(const char *dir){
-    char ruta[RUTA];
-    if (dir == NULL) {
-        getcwd(ruta, RUTA);
-        dir = ruta;
-    }
-
-    DIR *d = opendir(dir);
-    if (d == NULL) {
-        perror("opendir");
-        return;
-    }
-
-    struct dirent *entry;
-    while ((entry = readdir(d)) != NULL) {
-        printf("%s\n", entry->d_name);
-    }
-
-    closedir(d);
-=======
     printf("ID of containing device:  [%x,%x]\n", major(sb.st_dev), minor(sb.st_dev));
 
     printf("File type:                ");
@@ -175,5 +155,10 @@ void cat_fun(const char *ruta){
 
         close(tty);
     }
->>>>>>> 6a575be7465525c3879249bbc614f8ad43ac5d8b
+}
+
+void rename_fun(const char *old_name, const char *new_name){
+    if (rename(old_name, new_name) != -1) {
+        perror("rename");
+    }
 }
