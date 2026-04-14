@@ -24,5 +24,7 @@ void stat_fun(const char *ruta);
 
 void cat_fun(const char *ruta);
 
+void unlink_fun(const char *ruta);
+
 
 #endif /* MINISHELL_H */

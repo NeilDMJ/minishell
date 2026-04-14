@@ -154,3 +154,6 @@ void cat_fun(const char *ruta){
         close(tty);
     }
 }
+void unlink_fun(const char *ruta){
+    if(unlink(ruta) == -1) perror("unlink");
+}
