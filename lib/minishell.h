@@ -26,5 +26,6 @@ void cat_fun(const char *ruta);
 
 void unlink_fun(const char *ruta);
 
+void rename_fun(const char *old, const char *new);
 
 #endif /* MINISHELL_H */

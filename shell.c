@@ -53,6 +53,9 @@ int main() {
         else if(strcmp(args[0],"unlink") == 0){
             unlink_fun(args[1]);
         }
+        else if(strcmp(args[0], "rename")== 0){
+            rename_fun(args[1], args[2]);
+        }
         
     }
     return 0;
