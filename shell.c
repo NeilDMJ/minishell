@@ -55,11 +55,10 @@ int main() {
         else if(strcmp(args[0], "cat") == 0){
             cat_fun(args[1]);
         }
-        else if(strcmp(args[0], "rename") == 0){
-            if (argc < 3) {
-                fprintf(stderr, "Uso: rename <ruta_origen> <ruta_destino>\n");
-                continue;
-            }
+        else if(strcmp(args[0],"unlink") == 0){
+            unlink_fun(args[1]);
+        }
+        else if(strcmp(args[0], "rename")== 0){
             rename_fun(args[1], args[2]);
         }
         
@@ -67,4 +66,4 @@ int main() {
     return 0;
 }
 
-//gcc -o shell shell.c lib/minishell.c
+//gcc -I lib/ shell.c lib/minishell.c -o minishell

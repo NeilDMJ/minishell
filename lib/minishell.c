@@ -156,9 +156,10 @@ void cat_fun(const char *ruta){
         close(tty);
     }
 }
+void unlink_fun(const char *ruta){
+    if(unlink(ruta) == -1) perror("unlink");
+}
 
-void rename_fun(const char *old_name, const char *new_name){
-    if (rename(old_name, new_name) != -1) {
-        perror("rename");
-    }
+void rename_fun(const char *old, const char *new){
+    if(rename(old,new) == -1) perror("rename");
 }
