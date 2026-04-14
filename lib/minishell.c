@@ -54,3 +54,24 @@ int mkdir_fun(const char *cmd){
     return 0;
 }
 
+//funcion ls con opendir, readdir y closedir, reusando getcwd
+void ls_fun(const char *dir){
+    char ruta[RUTA];
+    if (dir == NULL) {
+        getcwd(ruta, RUTA);
+        dir = ruta;
+    }
+
+    DIR *d = opendir(dir);
+    if (d == NULL) {
+        perror("opendir");
+        return;
+    }
+
+    struct dirent *entry;
+    while ((entry = readdir(d)) != NULL) {
+        printf("%s\n", entry->d_name);
+    }
+
+    closedir(d);
+}

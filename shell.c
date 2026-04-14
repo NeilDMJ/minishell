@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "lib/minishell.h"
 #include <string.h>
 #include <stdio.h>
 
@@ -33,6 +33,11 @@ int main() {
                 continue;
             }
             cd_fun(args[1]);
+        }
+        else if (strcmp(args[0], "ls") == 0){
+            if (argc < 2) {
+                ls_fun(NULL); 
+            } 
         }
         else if(strcmp(args[0], "clear") == 0 ){
             //limpiar
