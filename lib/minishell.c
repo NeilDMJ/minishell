@@ -166,6 +166,10 @@ void rename_fun(const char *old, const char *new){
     if(rename(old,new) == -1) perror("rename");
 }
 
+/*
+    Pendiente implementar recursividad en la busqueda.
+    Requerimiento para proyecto de tercer parcial
+*/
 void find_fun(const char *ruta, const char *nombre_buscado){
     DIR *directorio;
     struct dirent *dirEntry;
@@ -201,7 +205,7 @@ void find_fun(const char *ruta, const char *nombre_buscado){
     if (encontrado) {
         return;
     }
-    
+
     printf("No se encontro '%s' en '%s'.\n", nombre_buscado, ruta);
     if (hay_subdirectorios) {
         printf("Hay mas directorios para buscar :\n");
