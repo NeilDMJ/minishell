@@ -28,4 +28,6 @@ void unlink_fun(const char *ruta);
 
 void rename_fun(const char *old, const char *new);
 
+void find_fun(const char *ruta, const char *nombre_buscado);
+
 #endif /* MINISHELL_H */

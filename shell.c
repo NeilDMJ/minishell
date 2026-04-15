@@ -79,6 +79,13 @@ int main() {
             }
             rename_fun(args[1], args[2]);
         }
+        else if(strcmp(args[0], "find") == 0){
+            if (argc < 3) {
+                fprintf(stderr, "Uso: find <ruta> <nombre_archivo_o_directorio>\n");
+                continue;
+            }
+            find_fun(args[1], args[2]);
+        }
         
     }
     return 0;
