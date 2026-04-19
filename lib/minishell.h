@@ -1,33 +1,40 @@
 #ifndef MINISHELL_H
 #define MINISHELL_H
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
 #include <sys/wait.h>
-#include <dirent.h>
-#include <errno.h>
 #include <sys/stat.h>
+#include <sys/sysmacros.h>
+#include <time.h>
+#include <stdint.h>
+#include <fcntl.h>
+#include <errno.h>
+#include <dirent.h>
+#include <sys/socket.h>
+#include <sys/ioctl.h>
+#include <net/if.h>
+#include <ifaddrs.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <pwd.h>
+#include <grp.h>
+
 #define MAX_ARGS 64
+#define RUTA     255
 
-void pwd_fun();
-
+void pwd_fun(void);
 void cd_fun(const char *ruta);
-
-int mkdir_fun(const char *cmd);
-
-int separar_cadena(char *cadena, char *args[], int max_args);
-
-void ls_fun();
-
+void ls_fun(char **args);
 void stat_fun(const char *ruta);
-
 void cat_fun(const char *ruta);
-
 void unlink_fun(const char *ruta);
-
-void rename_fun(const char *old, const char *new);
-
-int find_fun(const char *ruta, const char *nombre_buscado);
+void rename_fun(const char *old, const char *nuevo);
+void ipmac_fun(void);
+int  mkdir_fun(const char *cmd);
+int  separar_cadena(char *cadena, char *args[], int max_args);
+int  find_fun(const char *ruta, const char *nombre_buscado);
 
 #endif /* MINISHELL_H */
