@@ -166,66 +166,38 @@ void rename_fun(const char *old, const char *new){
     if(rename(old,new) == -1) perror("rename");
 }
 
-/*
-    Pendiente implementar recursividad en la busqueda.
-    Requerimiento para proyecto de tercer parcial
-*/
-void find_fun(const char *ruta, const char *nombre_buscado){
-    DIR *directorio;
-    struct dirent *dirEntry;
+int find_fun(const char *ruta, const char *nombre_buscado){
+    DIR *dir;
+    struct dirent *entry;
     struct stat sb;
     char ruta_completa[1024];
-    int encontrado = 0;
-    int hay_subdirectorios = 0;
-    directorio = opendir(ruta);
-    if (directorio == NULL){
-        fprintf(stderr, "No fue posible abrir el directorio %s. Error: %s\n",ruta, strerror(errno));
-        return ;
+
+    dir = opendir(ruta);
+    if (!dir)
+    {
+        fprintf(stderr, "No se pudo abrir: %s: %s\n", ruta, strerror(errno));
+        return (0);
     }
-    while ((dirEntry = readdir(directorio)) != NULL){
-        if (strcmp(dirEntry->d_name, ".") == 0 || strcmp(dirEntry->d_name, "..") == 0) {
+    while ((entry = readdir(dir)) != NULL)
+    {
+        if (entry->d_name[0] == '.')
             continue;
-        }else if (snprintf(ruta_completa, sizeof(ruta_completa), "%s/%s", ruta, dirEntry->d_name) >= (int)sizeof(ruta_completa)) {
-            fprintf(stderr, "Ruta demasiado larga, se omite: %s/%s\n", ruta, dirEntry->d_name);
+        if (snprintf(ruta_completa, sizeof(ruta_completa),
+            "%s/%s", ruta, entry->d_name) >= (int)sizeof(ruta_completa))
             continue;
-        }else if (lstat(ruta_completa, &sb) == -1) {
-            perror("lstat");
-            continue;
-        }else if(S_ISDIR(sb.st_mode)) {
-            hay_subdirectorios = 1;
-        }else if (strcmp(dirEntry->d_name, nombre_buscado) == 0) {
+        if (strcmp(entry->d_name, nombre_buscado) == 0)
+        {
             printf("Encontrado: %s\n", ruta_completa);
-            encontrado = 1;
-            break;
+            closedir(dir);
+            return (1);
         }
-    }
-
-    closedir(directorio);
-
-    if (encontrado) {
-        return;
-    }
-
-    printf("No se encontro '%s' en '%s'.\n", nombre_buscado, ruta);
-    if (hay_subdirectorios) {
-        printf("Hay mas directorios para buscar :\n");
-
-        directorio = opendir(ruta);
-        if (directorio == NULL) {
-            fprintf(stderr, "No se pudo reabrir el directorio %s. Error: %s\n", ruta, strerror(errno));
-            return;
-        }
-        while ((dirEntry = readdir(directorio)) != NULL) {
-            if (strcmp(dirEntry->d_name, ".") == 0 || strcmp(dirEntry->d_name, "..") == 0) {
-                continue;
-            }else if (snprintf(ruta_completa, sizeof(ruta_completa), "%s/%s", ruta, dirEntry->d_name) >= (int)sizeof(ruta_completa)) {
-                continue;
-            }else if (lstat(ruta_completa, &sb) == -1) {
-                continue;
-            }else if (S_ISDIR(sb.st_mode)) {
-                printf("- %s\n", ruta_completa);
+        if (lstat(ruta_completa, &sb) == 0 && S_ISDIR(sb.st_mode))
+            if (find_fun(ruta_completa, nombre_buscado))
+            {
+                closedir(dir);
+                return (1);
             }
-        }
-        closedir(directorio);
-    }    
+    }
+    closedir(dir);
+    return (0);
 }
