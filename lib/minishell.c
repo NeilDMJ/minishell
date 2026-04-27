@@ -318,6 +318,16 @@ void date_fun(void)
     printf("%s CST", buffer);
 }
 
-void fun_who(){
+void who_fun(){
     system("who");
+}
+
+void uname_fun(){
+    struct utsname info;
+    uname(&info);
+    printf("Sistema: %s\n", info.sysname);
+    printf("Nodo: %s\n", info.nodename);
+    printf("Release: %s\n", info.release);
+    printf("Version: %s\n", info.version);
+    printf("Arquitectura: %s\n", info.machine);
 }

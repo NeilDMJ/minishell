@@ -73,7 +73,7 @@ int main(void)
             who_fun();
         }
         else if(strcmp(args[0], "uname") == 0){
-            system("uname -a");
+            uname_fun();
         }
         else if (strcmp(args[0], "clear") == 0)
             system("clear");

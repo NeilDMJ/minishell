@@ -25,6 +25,7 @@
 #include <ifaddrs.h>
 #include <netdb.h>
 #include <time.h>
+#include <sys/utsname.h>
 
 
 #define MAX_ARGS 64
@@ -43,4 +44,6 @@ int  find_fun(const char *ruta, const char *nombre_buscado);
 int fun_getifaddrs(void);
 void date_fun(void);
 void who_fun(void);
+void uname_fun(void);
+
 #endif /* MINISHELL_H */
