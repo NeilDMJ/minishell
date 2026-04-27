@@ -1,5 +1,9 @@
 #include "minishell.h"
 
+#ifndef NI_NUMERICHOST
+#define NI_NUMERICHOST 1
+#endif
+
 void pwd_fun(void)
 {
     char ruta[RUTA];
@@ -266,55 +270,50 @@ int find_fun(const char *ruta, const char *nombre_buscado)
     return 0;
 }
 
-void ipmac_fun(void)
+int fun_getifaddrs(void)
 {
     struct ifaddrs *ifaddr, *ifa;
-    struct ifreq    ifr;
-    int             sock;
-    char            ip[INET_ADDRSTRLEN];
-    unsigned char  *mac;
+    char  host[INET6_ADDRSTRLEN];
 
     if (getifaddrs(&ifaddr) == -1)
     {
-        perror("ipmac");
-        return;
+        perror("getifaddrs");
+        return -1;
     }
 
-    sock = socket(AF_INET, SOCK_DGRAM, 0);
-    if (sock == -1)
-    {
-        perror("ipmac");
-        freeifaddrs(ifaddr);
-        return;
-    }
-
+    printf("Interfaces de red:\n");
     for (ifa = ifaddr; ifa != NULL; ifa = ifa->ifa_next)
     {
-        if (ifa->ifa_addr == NULL)             continue;
-        if (ifa->ifa_flags & IFF_LOOPBACK)     continue;
-        if (ifa->ifa_addr->sa_family != AF_INET) continue;
-
-        inet_ntop(AF_INET,
-            &((struct sockaddr_in *)ifa->ifa_addr)->sin_addr,
-            ip, sizeof(ip));
-
-        strncpy(ifr.ifr_name, ifa->ifa_name, IFNAMSIZ - 1);
-        ifr.ifr_name[IFNAMSIZ - 1] = '\0';
-
-        if (ioctl(sock, SIOCGIFHWADDR, &ifr) == -1)
-        {
-            perror("ipmac");
+        if (ifa->ifa_addr == NULL)
             continue;
-        }
 
-        mac = (unsigned char *)ifr.ifr_hwaddr.sa_data;
-        printf("Interfaz : %s\n", ifa->ifa_name);
-        printf("IP       : %s\n", ip);
-        printf("MAC      : %02x:%02x:%02x:%02x:%02x:%02x\n",
-            mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
-        printf("---\n");
+        int family = ifa->ifa_addr->sa_family;
+
+        //Verificamos las familias de direcciones IPV4 e IPV6
+        if (family == AF_INET || family == AF_INET6)
+        {
+            int s = getnameinfo(ifa->ifa_addr,
+                (family == AF_INET) ? sizeof(struct sockaddr_in) : sizeof(struct sockaddr_in6),
+                host, INET6_ADDRSTRLEN, NULL, 0, NI_NUMERICHOST);
+            if (s != 0)
+            {
+                perror("getnameinfo");
+                continue;
+            }
+            printf("%s: ", ifa->ifa_name);
+            printf("%s\n", host);
+        }
     }
 
-    close(sock);
     freeifaddrs(ifaddr);
+    return 0;
+}
+
+void date_fun(void)
+{
+    time_t t = time(NULL);
+    struct tm *tm_info = localtime(&t);
+    char buffer[64];
+    strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", tm_info);
+    printf("%s CST", buffer);
 }

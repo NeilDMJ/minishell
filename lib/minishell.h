@@ -21,6 +21,11 @@
 #include <arpa/inet.h>
 #include <pwd.h>
 #include <grp.h>
+#include <sys/types.h>
+#include <ifaddrs.h>
+#include <netdb.h>
+#include <time.h>
+
 
 #define MAX_ARGS 64
 #define RUTA     255
@@ -32,9 +37,9 @@ void stat_fun(const char *ruta);
 void cat_fun(const char *ruta);
 void unlink_fun(const char *ruta);
 void rename_fun(const char *old, const char *nuevo);
-void ipmac_fun(void);
 int  mkdir_fun(const char *cmd);
 int  separar_cadena(char *cadena, char *args[], int max_args);
 int  find_fun(const char *ruta, const char *nombre_buscado);
-
+int fun_getifaddrs(void);
+void date_fun(void);
 #endif /* MINISHELL_H */

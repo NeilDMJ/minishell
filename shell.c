@@ -60,9 +60,15 @@ int main(void)
             if (argc < 3) fprintf(stderr, "Uso: find <ruta> <nombre>\n");
             else          find_fun(args[1], args[2]);
         }
-        else if (strcmp(args[0], "ipmac") == 0)
-            ipmac_fun();
-
+        else if(strcmp(args[0], "free") == 0){
+            system("free -h");
+        }
+        else if(strcmp(args[0], "ip") == 0){
+            fun_getifaddrs();
+        }
+        else if(strcmp(args[0], "date") == 0){
+            date_fun();
+        }
         else if (strcmp(args[0], "clear") == 0)
             system("clear");
 
