@@ -104,6 +104,7 @@ void ls_fun(char **args)
     char           ruta_completa[RUTA + 256];
     int            flag_a = 0;
     int            flag_l = 0;
+    int            flag_i = 0;
 
     for (int i = 1; args[i] != NULL; i++)
     {
@@ -113,6 +114,7 @@ void ls_fun(char **args)
             {
                 if      (args[i][j] == 'a') flag_a = 1;
                 else if (args[i][j] == 'l') flag_l = 1;
+                else if (args[i][j] == 'i') flag_i = 1;
                 else
                     fprintf(stderr, "ls: opcion desconocida: -%c\n", args[i][j]);
             }
@@ -140,9 +142,17 @@ void ls_fun(char **args)
         snprintf(ruta_completa, sizeof(ruta_completa), "%s/%s", ruta, dirEntry->d_name);
 
         if (flag_l)
+        {
+            if (flag_i)
+                printf("%lu ", (unsigned long)dirEntry->d_ino);
             ls_print_long(ruta_completa, dirEntry->d_name);
+        }
         else
+        {
+            if (flag_i)
+                printf("%lu ", (unsigned long)dirEntry->d_ino);
             printf("%s\n", dirEntry->d_name);
+        }
     }
 
     closedir(directorio);
