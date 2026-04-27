@@ -72,6 +72,9 @@ int main(void)
         else if(strcmp(args[0], "who") == 0){
             who_fun();
         }
+        else if(strcmp(args[0], "uname") == 0){
+            system("uname -a");
+        }
         else if (strcmp(args[0], "clear") == 0)
             system("clear");
 
