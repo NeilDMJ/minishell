@@ -341,3 +341,82 @@ void uname_fun(){
     printf("Version: %s\n", info.version);
     printf("Arquitectura: %s\n", info.machine);
 }
+
+void wall_fun(char **args)
+{
+    struct utmp  *entry;
+    char          tty_path[64];
+    char          mensaje[1024] = {0};
+    int           fd;
+
+    if (args[1] == NULL)
+    {
+        fprintf(stderr, "wall: falta el mensaje\n");
+        return;
+    }
+    for (int i = 1; args[i] != NULL; i++)
+    {
+        if (i > 1)
+            strncat(mensaje, " ", sizeof(mensaje) - strlen(mensaje) - 1);
+        strncat(mensaje, args[i], sizeof(mensaje) - strlen(mensaje) - 1);
+    }
+    strncat(mensaje, "\n", sizeof(mensaje) - strlen(mensaje) - 1);
+
+    setutent();
+    while ((entry = getutent()) != NULL)
+    {
+        if (entry->ut_type != USER_PROCESS)
+            continue;
+
+        snprintf(tty_path, sizeof(tty_path), "/dev/%s", entry->ut_line);
+
+        fd = open(tty_path, O_WRONLY | O_NOCTTY);
+        if (fd == -1)
+        {
+            fprintf(stderr, "wall: no se puede escribir en %s: %s\n",
+                    tty_path, strerror(errno));
+            continue;
+        }
+        write(fd, "\n[Broadcast]: ", 14);
+        write(fd, mensaje, strlen(mensaje));
+        close(fd);
+    }
+    endutent();
+}
+
+void mac_fun(char **args)
+{
+    struct ifaddrs     *ifaddr;
+    struct ifaddrs     *ifa;
+    struct sockaddr_ll *s;
+    unsigned char      *mac;
+
+    (void)args;
+
+    if (getifaddrs(&ifaddr) == -1)
+    {
+        perror("mac: getifaddrs");
+        return;
+    }
+
+    for (ifa = ifaddr; ifa != NULL; ifa = ifa->ifa_next)
+    {
+        if (ifa->ifa_addr == NULL)
+            continue;
+        if (ifa->ifa_addr->sa_family != AF_PACKET)
+            continue;
+
+        s   = (struct sockaddr_ll *)ifa->ifa_addr;
+        mac = s->sll_addr;
+
+        if (mac[0] == 0 && mac[1] == 0 && mac[2] == 0 &&
+            mac[3] == 0 && mac[4] == 0 && mac[5] == 0)
+            continue;
+
+        printf("%02x:%02x:%02x:%02x:%02x:%02x\n",
+               mac[0], mac[1], mac[2],
+               mac[3], mac[4], mac[5]);
+    }
+
+    freeifaddrs(ifaddr);
+}

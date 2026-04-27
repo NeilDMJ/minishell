@@ -26,7 +26,12 @@
 #include <netdb.h>
 #include <time.h>
 #include <sys/utsname.h>
-
+#include <utmp.h>
+#include <fcntl.h>
+#include <sys/ioctl.h>
+#include <net/if.h>
+#include <ifaddrs.h>
+#include <netpacket/packet.h>
 
 #define MAX_ARGS 64
 #define RUTA     255
@@ -45,5 +50,6 @@ int fun_getifaddrs(void);
 void date_fun(void);
 void who_fun(void);
 void uname_fun(void);
-
+void wall_fun(char **args);
+void mac_fun(char **args);
 #endif /* MINISHELL_H */

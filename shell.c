@@ -80,6 +80,10 @@ int main(void)
 
         else if (strcmp(args[0], "exit") == 0)
             break;
+        else if (strcmp(args[0], "wall") == 0)
+            wall_fun(args);
+        else if (strcmp(args[0], "mac") == 0)
+            mac_fun(args);
 
         else
             fprintf(stderr, "%s: comando no encontrado\n", args[0]);
