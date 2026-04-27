@@ -69,6 +69,9 @@ int main(void)
         else if(strcmp(args[0], "date") == 0){
             date_fun();
         }
+        else if(strcmp(args[0], "who") == 0){
+            who_fun();
+        }
         else if (strcmp(args[0], "clear") == 0)
             system("clear");
 

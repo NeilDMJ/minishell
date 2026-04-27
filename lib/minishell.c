@@ -317,3 +317,7 @@ void date_fun(void)
     strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", tm_info);
     printf("%s CST", buffer);
 }
+
+void fun_who(){
+    system("who");
+}

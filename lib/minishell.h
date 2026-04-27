@@ -42,4 +42,5 @@ int  separar_cadena(char *cadena, char *args[], int max_args);
 int  find_fun(const char *ruta, const char *nombre_buscado);
 int fun_getifaddrs(void);
 void date_fun(void);
+void who_fun(void);
 #endif /* MINISHELL_H */
